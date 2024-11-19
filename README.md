@@ -18,6 +18,8 @@ Load `tidycensus` and `tidyverse` and make sure that you have your census API ke
 
 -   `acs` = TRUE : default call get_acs, if FALSE, call get_decennial
 
+-   `years.id` = "year" : chr column name assigned to year column
+
 `function` `census.crosswalk()` crosswalk data using weights from [NHGIS](https://www.nhgis.org/geographic-crosswalks)
 
 -   `data.crosswalk` : data.frame or data.table of the correct crosswalk data from NHGIS
