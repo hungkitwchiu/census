@@ -4,7 +4,7 @@ library(tidyverse)
 # check that you have your census API key loaded
 # census_api_key("YOUR API KEY GOES HERE")
 
-get.census <- function(state, county, geography, years, variables, geometry = TRUE, survey = "acs5", acs = TRUE){
+get.census <- function(state, county, geography, years, variables, geometry = FALSE, survey = "acs5", acs = TRUE, years.id = "year"){
   if (acs){
     temp <- map_dfr(
       years,
@@ -17,7 +17,7 @@ get.census <- function(state, county, geography, years, variables, geometry = TR
         survey = "acs5",
         geometry = geometry
       ),
-      .id = "year"  # when combining results, add id var (name of list item)
+      .id = eval(years.id)  # when combining results, add id var (name of list item)
     ) %>%
       arrange(variable, GEOID) %>% 
       mutate(year = as.numeric(year) + min(years)-1)
