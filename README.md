@@ -16,6 +16,6 @@
 
 -   `acs` = TRUE : default call get_acs, if FALSE, call get_decennial
 
-`function` `census.crosswalk()` crosswalk data using weights from [NHGIS]
+`function` `census.crosswalk()` crosswalk data using weights from [NHGIS](https://www.nhgis.org/geographic-crosswalks)
 
 -   
