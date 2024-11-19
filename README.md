@@ -30,4 +30,4 @@
 
 -   `col.estimate` : chr column name of the variable to be crosswalked
 
--   `col.year` = NULL : chr column name of the year column, if any
+-   `col.year` = NULL : chr column name of the year column, if any; note that only data from the same decade can be fed into the function
