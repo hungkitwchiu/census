@@ -18,4 +18,10 @@
 
 `function` `census.crosswalk()` crosswalk data using weights from [NHGIS](https://www.nhgis.org/geographic-crosswalks)
 
--   
+-   `data.crosswalk` : data.frame or data.table of the correct crosswalk data from NHGIS
+-   `col.start` : chr column name of the originating GEOID
+-   `col.target` : chr column name of the target GEOID
+-   `col.weight` : chr column name of the interpolation weight
+-   `data.var` : data.frame or data.table of the census data
+-   `col.estimate` : chr column name of the variable to be crosswalked
+-   `col.year` = NULL : chr column name of the year column, if any
