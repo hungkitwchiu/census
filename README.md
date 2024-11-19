@@ -1,4 +1,4 @@
-$$\textsf{\color{#0247FE}{function}}$$ `get.census()` wrapper for `get_acs()` or `get_decennial()`
+`$$\textsf{\color{#0247FE}{function}}$$` `get.census()` wrapper for `get_acs()` or `get_decennial()`
 
 -   `state` : chr such as "CA" or "06"
 
