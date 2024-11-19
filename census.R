@@ -27,7 +27,7 @@ get.census <- function(state, county, geography, years, variables, geometry = TR
       variables = variables, # P001001 for population
       state = state,
       county = county,
-      year = year,
+      year = years,
       geometry = geometry
     )
   }
@@ -41,7 +41,7 @@ state = "CA"
 county = "San Francisco"
 years = 2020
 
-# call, from acs5, population by census tracts in 2020
+# call, from acs5, population of San Francisco, by block group in 2020
 acs5.test <- get.census(state, county, geography, years, variables) %>%
   filter(GEOID != "06075980401")
 
