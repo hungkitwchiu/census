@@ -1,3 +1,9 @@
+library(tidycensus)
+library(tidyverse)
+
+# check that you have your census API key loaded
+# census_api_key("YOUR API KEY GOES HERE")
+
 get.census <- function(state, county, geography, years, variables, geometry = TRUE, survey = "acs5", acs = TRUE){
   if (acs){
     temp <- map_dfr(
