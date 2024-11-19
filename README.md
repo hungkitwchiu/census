@@ -1,4 +1,4 @@
-$$\textsf{\color{lightblue}{function}}$$ `get.census()` wrapper for `get_acs()` or `get_decennial()`
+$$\textsf{\color{blue2}{function}}$$ `get.census()` wrapper for `get_acs()` or `get_decennial()`
 
 -   `state` : chr such as "CA" or "06"
 
@@ -16,6 +16,6 @@ $$\textsf{\color{lightblue}{function}}$$ `get.census()` wrapper for `get_acs()` 
 
 -   `acs` = TRUE : default call get_acs, if FALSE, call get_decennial
 
-$$\textsf{\color{lightblue}{function}}$$ `census.crosswalk()` crosswalk data using weights from [NHGIS]
+$$\textsf{\color{blue2}{function}}$$ `census.crosswalk()` crosswalk data using weights from [NHGIS]
 
 -   
