@@ -12,7 +12,7 @@ Load `tidycensus` and `tidyverse` and make sure that you have your census API ke
 
 -   `variables` : chr variables as in load_variables(year, survey)
 
--   `geometry` = TRUE : get shape data
+-   `geometry` = FALSE : get shape data if TRUE
 
 -   `survey` = "acs5" : default survey variance set to "acs5"
 
