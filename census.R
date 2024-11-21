@@ -35,16 +35,15 @@ get.census <- function(state, county, geography, years, variables, geometry = FA
 }
 
 # testing get.census
-geography = "block group"
-variables = "B01003_001"
-state = "CA"
-county = "San Francisco"
-years = 2020
+# geography = "block group"
+# variables = "B01003_001"
+# state = "CA"
+# county = "San Francisco"
+# years = 2020
 
 # call, from acs5, population of San Francisco, by block group in 2020
-acs5.test <- get.census(state, county, geography, years, variables) %>%
-  filter(GEOID != "06075980401")
-
+#acs5.test <- get.census(state, county, geography, years, variables) %>%
+#  filter(GEOID != "06075980401")
 
 # currently supports single variable
 census.crosswalk <- function(data.crosswalk, col.start, col.target, col.weight, data.var, col.estimate, col.year = NULL){
@@ -81,13 +80,13 @@ census.crosswalk <- function(data.crosswalk, col.start, col.target, col.weight, 
 
 # test
 # test <- census.crosswalk(tract00.to.tract10, "tr2000ge", "tr2010ge", "wt_pop", acs5.2009, "estimate", "year")
-test <- census.crosswalk(block20.to.tract10, "bg2020ge", "tr2010ge", "wt_pop", acs5.2020, "estimate", "year")
+# test <- census.crosswalk(block20.to.tract10, "bg2020ge", "tr2010ge", "wt_pop", acs5.2020, "estimate", "year")
 
-sum((test %>% filter(year == 2020))$estimate)
-sum(acs5.2020.single$estimate)
+# sum((test %>% filter(year == 2020))$estimate)
+# sum(acs5.2020.single$estimate)
 
-mapview(acs5.2009, zcol = "estimate") # 2009 data, 2009 tract
-sum(acs5.2009$estimate)
-mapview.with.shape.data(test %>% filter(year == 2020), acs5.2010, "estimate", "GEOID") # 2009 data, 2010 tract
-sum(test$estimate)
-mapview(acs5.2010, zcol = "estimate") # 2010 data, 2010 tract
+# mapview(acs5.2009, zcol = "estimate") # 2009 data, 2009 tract
+# sum(acs5.2009$estimate)
+# mapview.with.shape.data(test %>% filter(year == 2020), acs5.2010, "estimate", "GEOID") # 2009 data, 2010 tract
+# sum(test$estimate)
+# mapview(acs5.2010, zcol = "estimate") # 2010 data, 2010 tract
