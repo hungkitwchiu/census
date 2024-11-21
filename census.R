@@ -4,15 +4,15 @@ library(tidyverse)
 # check that you have your census API key loaded
 # census_api_key("YOUR API KEY GOES HERE")
 
-get.census <- function(state, county, geography, years, variables, geometry = FALSE, survey = "acs5", acs = TRUE, years.id = "year"){
+get.census <- function(state.county, geography, years, variables, geometry = FALSE, survey = "acs5", acs = TRUE, years.id = "year"){
   if (acs){
     temp <- map_dfr(
       years,
       ~ get_acs(
         geography = geography, # "tract" or "block group" or "county subdivision"
         variables = variables, # B01003_001 for population
-        state = state, # all of CA: c("Alameda", "Contra Costa", "Marin", "San Francisco", "San Mateo", "Santa Clara", "Solano")
-        county = county,
+        state = state.county[[1]], # all of CA: c("Alameda", "Contra Costa", "Marin", "San Francisco", "San Mateo", "Santa Clara", "Solano")
+        county = state.county[[2]],
         year = .x,
         survey = "acs5",
         geometry = geometry
