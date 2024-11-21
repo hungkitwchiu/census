@@ -62,7 +62,7 @@ census.crosswalk <- function(data.crosswalk, col.start, col.target, col.weight, 
   }
   
   cols.group <- c(eval(col.year), eval(col.target))
-
+  
   temp <- data.crosswalk %>% 
     filter(!!rlang::sym(col.start) %in% data.var$GEOID) %>%
     select(!!rlang::sym(col.start), !!rlang::sym(col.target), !!rlang::sym(col.weight)) %>%
@@ -71,6 +71,10 @@ census.crosswalk <- function(data.crosswalk, col.start, col.target, col.weight, 
     group_by(across(any_of(cols.group))) %>%
     dplyr::summarise(estimate = as.integer(sum(target.estimate))) %>%
     rename_with(~ "GEOID", !!rlang::sym(col.target))
+  
+  #temp <- data.var %>%
+  #  left_join(data.crosswalk, by = join_by(GEOID == !!rlang::sym(col.start)), keep = TRUE) %>% # look up estimates of corresponding col.start
+  #  mutate(target.estimate = get(col.estimate) * get(col.weight))
   
   return(temp)
 }
