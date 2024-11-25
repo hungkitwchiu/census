@@ -94,7 +94,7 @@ census.crosswalk <- function(data.crosswalk, col.start, col.target, col.weight, 
 
 get.geometry <- function(data.interest, coords.name, data.shape, parallel = FALSE){
   #geo.within <- function(x){return(sf::st_within(x, data.shape))}
-  #cl <- makeCluster(getOption("cl.cores", 10))
+  #cl <- makeCluster(getOption("cl.cores", detectCores(logical = FALSE)-2))
   #clusterExport(cl, varlist = list("data.shape", "geo.within"), envir = environment())
   
   data.interest <- data.interest %>%
