@@ -35,3 +35,5 @@ Load `tidycensus` and `tidyverse` and make sure that you have your census API ke
 -   `col.estimate` : chr column name of the variable to be crosswalked
 
 -   `col.year` = NULL : chr column name of the year column, if any; note that only data from the same decade can be fed into the function
+
+`function` `get.geometry()`
