@@ -25,8 +25,8 @@ get.census <- function(state.county, geography, years, variables, geometry = FAL
     temp <- get_decennial(
       geography = geography,
       variables = variables, # P001001 for population
-      state = state,
-      county = county,
+      state = state.county[[1]],
+      county = state.county[[2]],
       year = years,
       geometry = geometry
     )
