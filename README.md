@@ -2,7 +2,7 @@ Load `tidycensus` and `tidyverse` and make sure that you have your census API ke
 
 `function` `get.census()` wrapper for `get_acs()` or `get_decennial()`
 
--   `state` : chr such as "CA" or "06"
+-   `state` : chr such as "CA" or "06" (NOTE: a numeric 6 will not work)
 
 -   `county` : chr such as "San Francisco" or "075"
 
