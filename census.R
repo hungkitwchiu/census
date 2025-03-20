@@ -64,7 +64,7 @@ census.crosswalk <- function(data.crosswalk, col.start, col.target, col.weight, 
   
   temp <- data.crosswalk %>% 
     filter(!!rlang::sym(col.start) %in% data.var$GEOID) %>%
-    select(!!rlang::sym(col.start), !!rlang::sym(col.target), !!rlang::sym(col.weight)) %>%
+    dplyr::select(!!rlang::sym(col.start), !!rlang::sym(col.target), !!rlang::sym(col.weight)) %>%
     right_join(data.var, by = join_by(!!rlang::sym(col.start) == GEOID), keep = TRUE, relationship = "many-to-many") %>% # look up estimates of corresponding col.start
     mutate(target.estimate = get(col.estimate) * get(col.weight)) %>%
     group_by(across(any_of(cols.group))) %>%
@@ -102,7 +102,7 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = FALS
     filter(!is.na(!!rlang::sym(coords.name[1]))) # omit if longitude is NA
   
   data.interest$Geometry <- st_as_sf(
-    as.data.frame(data.interest %>% select(all_of(coords.name))),
+    as.data.frame(data.interest %>% dplyr::select(all_of(coords.name))),
     coords = coords.name,
     crs = st_crs(data.shape)
   )
