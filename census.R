@@ -93,11 +93,7 @@ census.crosswalk <- function(data.crosswalk, col.start, col.target, col.weight, 
 
 
 get.geometry <- function(data.interest, coords.name, data.shape, parallel = FALSE){
-  #geo.within <- function(x){return(sf::st_within(x, data.shape))}
-  #cl <- makeCluster(getOption("cl.cores", detectCores(logical = FALSE)-2))
-  #clusterExport(cl, varlist = list("data.shape", "geo.within"), envir = environment())
-  
-  data.interest <- data.interest %>%
+    data.interest <- data.interest %>%
     filter(!!rlang::sym(coords.name[1]) != "") %>% # omit if longitude is empty
     filter(!is.na(!!rlang::sym(coords.name[1]))) # omit if longitude is NA
   
@@ -108,8 +104,8 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = FALS
   )
   
   if (parallel){data.interest$block <- parallel::parLapplyLB(cl, list(data.interest$Geometry), geo.within)
-  }else{ data.interest <- data.interest %>% mutate(block = st_within(Geometry, data.shape))}
-
+  }else{data.interest <- data.interest %>% mutate(block = st_within(Geometry, data.shape))}
+  
   in.none = sum(data.interest$block %>% lengths == 0)
   in.multiple = sum(data.interest$block %>% lengths > 1)
   
@@ -117,9 +113,9 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = FALS
     filter(block %>% lengths > 0) %>% # get rid of (empty) in Sparse geometry binary predicate (sgbp) list
     filter(block %>% lengths < 2) %>% # also get rid of points within multiple shapes
     mutate(GEOID = data.shape$GEOID[as.numeric(unlist(block))])
-
+  
   if (in.none > 0){print(paste("Removed ", in.none, " rows with unmatched geometry"))}
   if (in.multiple > 0){print(paste("Removed ", in.multiple, " rows with multiple matched blocks"))}
-
+  
   return(data.interest)
 }
