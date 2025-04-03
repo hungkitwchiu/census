@@ -15,7 +15,8 @@ get.census <- function(state.county, geography, years, variables, geometry = FAL
         county = state.county[[2]], # all of CA: c("Alameda", "Contra Costa", "Marin", "San Francisco", "San Mateo", "Santa Clara", "Solano")
         year = .x,
         survey = "acs5",
-        geometry = geometry
+        geometry = geometry,
+        cache_table = TRUE
       ),
       .id = eval(years.id)  # when combining results, add id var (name of list item)
     ) %>%
