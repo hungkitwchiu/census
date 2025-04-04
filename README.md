@@ -1,3 +1,5 @@
+**AS OF APR 3, 2025, `geometry` DATA IS DISABLED FROM CENSUS' END, NO MORE `geometry = TRUE`**
+
 Load `tidycensus` and `tidyverse` and make sure that you have your census API key loaded into the environment.
 
 `function` `get.census()` wrapper for `get_acs()` or `get_decennial()`
