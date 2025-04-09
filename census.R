@@ -35,17 +35,6 @@ get.census <- function(state.county, geography, years, variables, geometry = FAL
   return(temp)
 }
 
-# testing get.census
-# geography = "block group"
-# variables = "B01003_001"
-# state = "CA"
-# county = "San Francisco"
-# years = 2020
-
-# call, from acs5, population of San Francisco, by block group in 2020
-#acs5.test <- get.census(state, county, geography, years, variables) %>%
-#  filter(GEOID != "06075980401")
-
 # currently supports single variable
 census.crosswalk <- function(data.crosswalk, col.start, col.target, col.weight, data.var, col.estimate, col.year = NULL){
   data.crosswalk <- as.data.table(data.crosswalk)
@@ -79,20 +68,6 @@ census.crosswalk <- function(data.crosswalk, col.start, col.target, col.weight, 
   return(temp)
 }
 
-# test
-# test <- census.crosswalk(tract00.to.tract10, "tr2000ge", "tr2010ge", "wt_pop", acs5.2009, "estimate", "year")
-# test <- census.crosswalk(block20.to.tract10, "bg2020ge", "tr2010ge", "wt_pop", acs5.2020, "estimate", "year")
-
-# sum((test %>% filter(year == 2020))$estimate)
-# sum(acs5.2020.single$estimate)
-
-# mapview(acs5.2009, zcol = "estimate") # 2009 data, 2009 tract
-# sum(acs5.2009$estimate)
-# mapview.with.shape.data(test %>% filter(year == 2020), acs5.2010, "estimate", "GEOID") # 2009 data, 2010 tract
-# sum(test$estimate)
-# mapview(acs5.2010, zcol = "estimate") # 2010 data, 2010 tract
-
-
 get.geometry <- function(data.interest, coords.name, data.shape, parallel = FALSE){
   data.interest <- data.interest %>%
     filter(!!rlang::sym(coords.name[1]) != "") %>% # omit if longitude is empty
@@ -105,11 +80,18 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = FALS
   ) %>%
     st_transform(crs = st_crs(data.shape)) # convert to crs of shape file
   
-  if (parallel){data.interest$block <- parallel::parLapplyLB(cl, list(data.interest$Geometry), geo.within)
+  if (parallel){
+    geo.within <- function(x){return(sf::st_within(x, data.shape))}
+    cl <- makeCluster(6, type='PSOCK')
+    clusterExport(cl, varlist = list("data.shape", "geo.within"), envir = environment())
+    data.interest$block <- clusterApplyLB(cl, list(data.interest$Geometry), geo.within)
+    stopCluster(cl)
+    gc()
   }else{data.interest <- data.interest %>% mutate(block = st_within(Geometry, data.shape))}
   
   in.none = sum(data.interest$block %>% lengths == 0)
   in.multiple = sum(data.interest$block %>% lengths > 1)
+
   
   data.interest <- data.interest %>%
     filter(block %>% lengths > 0) %>% # get rid of (empty) in Sparse geometry binary predicate (sgbp) list
