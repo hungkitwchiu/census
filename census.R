@@ -81,6 +81,7 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = FALS
     st_transform(crs = st_crs(data.shape)) # convert to crs of shape file
   
   if (parallel){
+    require(parallel)
     cl <- makeCluster(getOption("cl.cores", detectCores(logical = FALSE)-2), type = "PSOCK")
     clusterExport(cl, varlist = list("data.shape"), envir = environment())
     data.interest$block <- clusterApplyLB(cl, list(data.interest$Geometry), function(x){sf::st_within(x, data.shape)})
