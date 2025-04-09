@@ -81,25 +81,24 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = FALS
     st_transform(crs = st_crs(data.shape)) # convert to crs of shape file
   
   if (parallel){
-    geo.within <- function(x){return(sf::st_within(x, data.shape))}
-    cl <- makeCluster(getOption("cl.cores", detectCores(logical = TRUE)-2))
-    clusterExport(cl, varlist = list("data.shape", "geo.within"), envir = environment())
-    data.interest$block <- clusterApplyLB(cl, list(data.interest$Geometry), geo.within)
+    cl <- makeCluster(getOption("cl.cores", detectCores(logical = FALSE)-2), type = "PSOCK")
+    clusterExport(cl, varlist = list("data.shape"), envir = environment())
+    data.interest$block <- clusterApplyLB(cl, list(data.interest$Geometry), function(x){sf::st_within(x, data.shape)})
     stopCluster(cl)
     gc()
   }else{data.interest <- data.interest %>% mutate(block = st_within(Geometry, data.shape))}
   
   in.none = sum(data.interest$block %>% lengths == 0)
   in.multiple = sum(data.interest$block %>% lengths > 1)
-
   
   data.interest <- data.interest %>%
     filter(block %>% lengths > 0) %>% # get rid of (empty) in Sparse geometry binary predicate (sgbp) list
     filter(block %>% lengths < 2) %>% # also get rid of points within multiple shapes
-    mutate(GEOID = data.shape$GEOID[as.numeric(unlist(block))])
-  
-  if (in.none > 0){print(paste("Removed ", in.none, " rows with unmatched geometry"))}
-  if (in.multiple > 0){print(paste("Removed ", in.multiple, " rows with multiple matched blocks"))}
+    mutate(GEOID = data.shape$GEOID[as.numeric(unlist(block))]) # make sure GEOID is in data.shape
+    ts<-shape.list[[1]]
+
+  if (in.none > 0){cat("Removed ", in.none, " rows with unmatched geometry", "\n")}
+  if (in.multiple > 0){cat("Removed ", in.multiple, " rows with multiple matched blocks", "\n")}
   
   return(data.interest)
 }
