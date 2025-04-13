@@ -38,4 +38,12 @@ Load `tidycensus` and `tidyverse` and make sure that you have your census API ke
 
 -   `col.year` = NULL : chr column name of the year column, if any; note that only data from the same decade can be fed into the function
 
-`function` `get.geometry()`
+`function` `get.geometry()` function for getting Census geographies for a given data set
+
+-  `data.interest` : data with rows of GPS location that requires mapping to Census geographies, assumed to be `ESPG:4326` (the standard GPS longitude and latitude)
+
+-  `coords.name` : character vector of 2 elements, with first one being column name of longitude (X), and second one being column name of latitude (Y)
+
+-  `data.shape` : relevant Census data with geography information (TIGER lines)
+
+-  `parallel` : if `TRUE`, run code in parallel using multiple cores
