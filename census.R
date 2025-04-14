@@ -68,7 +68,7 @@ census.crosswalk <- function(data.crosswalk, col.start, col.target, col.weight, 
   return(temp)
 }
 
-get.geometry <- function(data.interest, coords.name, data.shape, parallel = FALSE){
+get.geometry <- function(data.interest, coords.name, data.shape, parallel = FALSE, crs = "EPSG:4326"){
   data.interest <- data.interest %>%
     filter(!!rlang::sym(coords.name[1]) != "") %>% # omit if longitude is empty
     filter(!is.na(!!rlang::sym(coords.name[1]))) # omit if longitude is NA
@@ -76,7 +76,7 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = FALS
   data.interest$Geometry <- st_as_sf(
     as.data.frame(data.interest %>% dplyr::select(all_of(coords.name))),
     coords = coords.name,
-    crs = st_crs("EPSG:4326") # assuming coords come in WSG84/ESPG4326
+    crs = st_crs(crs) # assuming coords come in WSG84/ESPG4326
   ) %>%
     st_transform(crs = st_crs(data.shape)) # convert to crs of shape file
   
