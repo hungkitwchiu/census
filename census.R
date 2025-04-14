@@ -70,7 +70,7 @@ census.crosswalk <- function(data.crosswalk, col.start, col.target, col.weight, 
 
 get.geometry <- function(data.interest, coords.name, data.shape, parallel = FALSE, crs = "EPSG:4326"){
   data.interest <- data.interest %>%
-    filter(!!rlang::sym(coords.name[1]) != "") %>% # omit if longitude is empty
+    filter(!(!!rlang::sym(coords.name[1]) %in% c("","NA"))) %>% # omit if longitude is empty or "NA"
     filter(!is.na(!!rlang::sym(coords.name[1]))) # omit if longitude is NA
   
   data.interest$Geometry <- st_as_sf(
