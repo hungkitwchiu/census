@@ -82,7 +82,7 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = FALS
   
   if (parallel){
     require(parallel)
-    cl <- makeCluster(getOption("cl.cores", detectCores(logical = FALSE)), type = "PSOCK")
+    cl <- makeCluster(getOption("cl.cores", detectCores(logical = FALSE)) - 2, type = "PSOCK")
     clusterExport(cl, varlist = list("data.shape"), envir = environment())
     data.interest$block <- clusterApplyLB(cl, list(data.interest$Geometry), function(x){sf::st_within(x, data.shape)})
     stopCluster(cl)
