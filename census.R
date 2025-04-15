@@ -1,5 +1,6 @@
 library(tidycensus)
 library(tidyverse)
+library(parallel)
 
 # check that you have your census API key loaded
 # census_api_key("YOUR API KEY GOES HERE")
