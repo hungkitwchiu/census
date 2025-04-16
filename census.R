@@ -70,16 +70,14 @@ census.crosswalk <- function(data.crosswalk, col.start, col.target, col.weight, 
 }
 
 get.geometry <- function(data.interest, coords.name, data.shape, parallel = FALSE, crs = "EPSG:4326"){
-  nrow.complete <- nrow(data.interest)
+  nrow.c <- nrow(data.interest)
   data.interest <- data.interest %>%
     filter(!(!!rlang::sym(coords.name[1]) %in% c("","NA"))) %>% # omit if latitude is empty or "NA"
     filter(!is.na(!!rlang::sym(coords.name[1]))) %>% # omit if latitude is NA
     filter(!is.na(!!rlang::sym(coords.name[2]))) # omit if longitude is NA
-  nrow.dropped <- nrow(data.interest)
+  nrow.d <- nrow(data.interest)
 
-  if (nrow.complete != nrow.dropped){
-   cat(nrow.complete - nrow.dropped, "rows dropped due to unknown coordinates") 
-  }
+  if (nrow.c != nrow.d){cat(nrow.c - nrow.d, "rows out of", nrow.c, "dropped due to unknown coordinates.")}
   
   data.interest$Geometry <- st_as_sf(
     as.data.frame(data.interest %>% dplyr::select(all_of(coords.name))),
