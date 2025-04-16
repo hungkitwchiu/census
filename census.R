@@ -77,7 +77,7 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = FALS
     filter(!is.na(!!rlang::sym(coords.name[2]))) # omit if longitude is NA
   nrow.d <- nrow(data.interest)
 
-  if (nrow.c != nrow.d){cat(nrow.c - nrow.d, "rows out of", nrow.c, "dropped due to unknown coordinates.")}
+  if (nrow.c != nrow.d){cat("Dropped", nrow.c - nrow.d, "rows out of", nrow.c, "due to unknown coordinates \n")}
   
   data.interest$Geometry <- st_as_sf(
     as.data.frame(data.interest %>% dplyr::select(all_of(coords.name))),
