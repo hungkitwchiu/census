@@ -102,7 +102,6 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE
     filter(block %>% lengths > 0) %>% # get rid of (empty) in Sparse geometry binary predicate (sgbp) list
     filter(block %>% lengths < 2) %>% # also get rid of points within multiple shapes
     mutate(GEOID = data.shape$GEOID[as.numeric(unlist(block))]) # make sure GEOID is in data.shape
-  ts<-shape.list[[1]]
   
   if (in.none > 0){cat("Removed ", in.none, " rows with unmatched geometry", "\n")}
   if (in.multiple > 0){cat("Removed ", in.multiple, " rows with multiple matched blocks", "\n")}
