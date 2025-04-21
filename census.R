@@ -102,8 +102,8 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE
     filter(block %>% lengths < 2) %>% # also get rid of points within multiple shapes
     mutate(GEOID = data.shape$GEOID[as.numeric(unlist(block))]) # make sure GEOID is in data.shape
   
-  if (in.none > 0){cat("Removed ", in.none, " rows with unmatched geometry", "\n")}
-  if (in.multiple > 0){cat("Removed ", in.multiple, " rows with multiple matched blocks", "\n")}
+  if (in.none > 0){cat("Removed", in.none, "rows with unmatched geometry", "\n")}
+  if (in.multiple > 0){cat("Removed", in.multiple, "rows with multiple matched blocks", "\n")}
   
   return(data.interest)
 }
