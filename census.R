@@ -89,6 +89,8 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE
   if (parallel){
     cl <- makeCluster(detectCores(logical = FALSE)-2, type = "PSOCK")
     clusterExport(cl, varlist = c("data.shape"), envir = environment())
+    # make sure a list is passed in 2nd argument, can be data.interest[, "Geometry"]
+    # but not data.interest[, `Geometry`] or data.interest[, Geometry]
     data.interest$block <- parLapplyLB(cl, list(data.interest$Geometry), st_within, data.shape)
     stopCluster(cl)
     gc()
