@@ -85,7 +85,7 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE
   data.interest$Geometry <- st_as_sf(
     as.data.frame(data.interest %>% dplyr::select(all_of(coords.name))),
     coords = coords.name,
-    crs = st_crs(crs) # assuming coords come in WSG84/ESPG4326
+    crs = st_crs(crs) # assuming coords come in WGS84/EPSG4326
   ) %>%
     st_transform(crs = st_crs(data.shape)) # convert to crs of shape file
   
