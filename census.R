@@ -77,7 +77,9 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE
   data.interest <- data.interest %>%
     filter(!(!!rlang::sym(coords.name[1]) %in% c("","NA"))) %>% # omit if latitude is empty or "NA"
     filter(!is.na(!!rlang::sym(coords.name[1]))) %>% # omit if latitude is NA
-    filter(!is.na(!!rlang::sym(coords.name[2]))) # omit if longitude is NA
+    filter(!is.na(!!rlang::sym(coords.name[2]))) %>% # omit if longitude is NA
+    filter(!(!!rlang::sym(coords.name[1]) == 0)) %>%
+    filter(!(!!rlang::sym(coords.name[2]) == 0))
   nrow.d <- nrow(data.interest)
 
   if (nrow.c != nrow.d){cat("Dropped", nrow.c - nrow.d, "rows out of", nrow.c, "due to unknown coordinates \n")}
