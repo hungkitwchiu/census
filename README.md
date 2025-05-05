@@ -40,7 +40,7 @@ Load `tidycensus` and `tidyverse` and make sure that you have your census API ke
 
 `function` `get.geometry()` function for getting Census geographies for a given data set
 
-*WARNING*: This function treats (0,0) coordinates as `NA`
+*WARNING*: This function treats `(0,0)` coordinates as `NA`
 
 -  `data.interest` : data with rows of GPS location that requires mapping to Census geographies, assumed to be `ESPG:4326` (the standard GPS longitude and latitude)
 
