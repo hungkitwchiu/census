@@ -75,13 +75,16 @@ census.crosswalk <- function(data.crosswalk, col.start, col.target, col.weight, 
 get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE, crs = "EPSG:4326"){
   nrow.c <- nrow(data.interest)
   data.interest <- data.interest %>%
-    filter(!(!!rlang::sym(coords.name[1]) %in% c("","NA"))) %>% # omit if latitude is empty or "NA"
+    filter(!(!!rlang::sym(coords.name[1]) %in% c("","NA"))) %>%
+    # don't refactor this using any(), you tried
     # omit if latitude or longitude is NA
-    filter(!any(is.na(!!rlang::sym(coords.name[1])), is.na(!!rlang::sym(coords.name[2])))) %>%
+    filter(!is.na(!!rlang::sym(coords.name[1]))) %>%
+    filter(!is.na(!!rlang::sym(coords.name[2]))) %>%
     # omit if latitude or longitude is (floating point) zero
-    filter(!any(abs(!!rlang::sym(coords.name[1])) < 1e-6, abs(!!rlang::sym(coords.name[2])) < 1e-6))
+    filter(!abs(!!rlang::sym(coords.name[1])) < 1e-6) %>%
+    filter(!abs(!!rlang::sym(coords.name[2])) < 1e-6)
   nrow.d <- nrow(data.interest)
-
+  
   if (nrow.d < nrow.c){cat("Dropped", nrow.c - nrow.d, "rows out of", nrow.c, "with no coordinates \n")}
   
   data.interest$Geometry <- st_as_sf(
@@ -100,7 +103,7 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE
     stopCluster(cl)
     gc()
   }else{data.interest <- data.interest %>% mutate(block = st_within(Geometry, data.shape))}
-
+  
   in.none = sum(data.interest$block %>% lengths == 0)
   in.multiple = sum(data.interest$block %>% lengths > 1)
   
