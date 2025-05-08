@@ -1,6 +1,7 @@
 library(tidycensus)
 library(tidyverse)
 library(parallel)
+library(furrr)
 
 # check that you have your census API key loaded
 # census_api_key("YOUR API KEY GOES HERE")
@@ -8,7 +9,7 @@ library(parallel)
 get.census <- function(state.county, geography, years, variables, geometry = FALSE, survey = "acs5", 
                        acs = TRUE, years.id = "year"){
   if (acs){
-    temp <- map_dfr(
+    temp <- future_map_dfr(
       years,
       ~ get_acs(
         # "tract" or "block group" or "county subdivision", etc.
