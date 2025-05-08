@@ -2,7 +2,7 @@
 
 Load `tidycensus` and `tidyverse` and make sure that you have your census API key loaded into the environment.
 
-`function` `get.census()` wrapper for `get_acs()` or `get_decennial()`
+`function` `get.census()` wrapper for `get_acs()` or `get_decennial()`, allowing a list of years at once
 
 -   `state` : chr such as "CA" or "06" (NOTE: a numeric 6 will not work)
 
