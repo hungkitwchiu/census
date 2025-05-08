@@ -14,7 +14,6 @@ get.census <- function(state.county, geography, years, variables, geometry = FAL
       ~ get_acs(
         # "tract" or "block group" or "county subdivision", etc.
         geography = geography,
-        # "B01003_001" for population
         variables = variables,
         state = state.county[[1]],
         county = state.county[[2]],
