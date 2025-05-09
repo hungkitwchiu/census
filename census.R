@@ -86,7 +86,7 @@ census.crosswalk <- function(crosswalk.file, col.start, col.end, col.weight, dat
     mutate_at(cols.walk, ~.x * get(col.weight)) %>%
     # aggregate back to a single row per GEOID per year
     group_by(across(any_of(cols.group))) %>%
-    dplyr::summarise_at(cols.walk, ~as.integer(sum(.x, na.rm = TRUE), na.rm = TRUE)) %>% 
+    dplyr::summarise_at(cols.walk, ~round(sum(.x, na.rm = TRUE))) %>% 
     # rename GEOID column to "GEOID"
     rename_with(~ "GEOID", !!rlang::sym(col.end))
   
