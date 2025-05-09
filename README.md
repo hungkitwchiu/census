@@ -1,11 +1,15 @@
-Some of this code is embeded in another project, see [Census data](https://hkwilliamchiu.github.io/doc.Census.html) for a discussion of some of the functions, including a complete, fully worked example of crosswalking 2020s block group variables to 2010s tracts.
+# census
 
+Some of this code is embeded in another project, see [Census data](https://hkwilliamchiu.github.io/doc.Census.html) for a discussion of some of the functions, including a complete, fully worked example of crosswalking 2020s block group variables to 2010s tracts. To call, <br />
 
-**AS OF MAY 8, 2025, `geometry` DATA IS BACK ONLINE**
+```r
+source("https://raw.githubusercontent.com/hkwilliamchiu/r-data-wrangling/main/functions.R")
+```
+To use the census related functions, make sure you load `tidycensus` and `tidyverse` and make sure that you have your census API key stored the environment otherwise you will be limited to 500 calls per day. API key can be obtained for free from Census.
 
-Load `tidycensus` and `tidyverse` and make sure that you have your census API key loaded into the environment.
+# Functions
 
-`function` `get.census()` wrapper for `get_acs()` or `get_decennial()` to get multiple years at once
+`get.census()` wrapper for `get_acs()` or `get_decennial()` to get multiple years at once
 
 -   `state` : chr such as "CA" or "06" (NOTE: a numeric 6 will not work)
 
