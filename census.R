@@ -55,7 +55,7 @@ get.census.list <- function(s.c.list, geography, years, variables, geometry = FA
   return(rbindlist(data.list))
 }
 
-# currently supports single variable
+# currently supports a single variable data.var
 census.crosswalk <- function(data.crosswalk, col.start, col.target, col.weight, data.var, col.estimate, col.year = NULL){
   data.crosswalk <- as.data.table(data.crosswalk)
   data.var <- as.data.table(data.var)
@@ -64,7 +64,7 @@ census.crosswalk <- function(data.crosswalk, col.start, col.target, col.weight, 
   if (!all(unique(data.var$GEOID) %in% data.crosswalk[, get(col.start)])){
     stop("GEOID does not exist in data.crosswalk, check if you have the correct crosswalk for your geography")}
   if (!any(unique(data.var$GEOID) %in% data.crosswalk[, get(col.target)])){
-    print("Note that none of the GEOID is in col.target (this is expected for crosswalks between different levels of geography)")}
+    cat("Note that none of the GEOID is in col.target (expected for crosswalks between different levels of geography) \n")}
   if (!is.null(col.year)){
     years.mod = sort(unique(data.var[, get(col.year)])) %% 10
     if (!all(sort(years.mod) == years.mod)){print("Warning: Years are not from the same decade")}
