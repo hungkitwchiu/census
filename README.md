@@ -1,4 +1,4 @@
-**AS OF APR 3, 2025, `geometry` DATA IS DISABLED FROM CENSUS' END, NO MORE `geometry = TRUE`**
+**AS OF MAY 8, 2025, `geometry` DATA IS BACK ONLINE**
 
 Load `tidycensus` and `tidyverse` and make sure that you have your census API key loaded into the environment.
 
