@@ -74,7 +74,7 @@ census.crosswalk <- function(crosswalk.file, col.start, col.end, col.weight, dat
   # get desired group_by keys; year could be NULL
   cols.group <- c(eval(col.year), eval(col.end))
   
-  temp2 <- crosswalk.file %>% 
+  temp <- crosswalk.file %>% 
     # filter only relevant GEOID
     filter(!!rlang::sym(col.start) %in% data.walk$GEOID) %>%
     # select starting GEOID, ending GEOID, and weight columns
