@@ -39,6 +39,22 @@ get.census <- function(state.county, geography, years, variables, geometry = FAL
   return(temp)
 }
 
+get.census.list <- function(state.county.list, geography, years, variables, geometry){
+  tic()
+  data.list <- lapply(state.county.list, function(x){
+    print(x)
+    temp <- get.census(x, geography, years, variables, geometry = geometry)
+    temp <- temp %>% 
+      select(year, GEOID, variable, estimate)  %>%
+      mutate(variable = str_extract(variable, "[0-9]*$")) %>%
+      mutate(variable = as.numeric(variable)) %>%
+      mutate(variable = variables[variable])
+    temp <- dcast(setDT(temp), year+GEOID~variable, value.var = "estimate")
+  })
+  toc()
+  return(rbindlist(data.list))
+}
+
 # currently supports single variable
 census.crosswalk <- function(data.crosswalk, col.start, col.target, col.weight, data.var, col.estimate, col.year = NULL){
   data.crosswalk <- as.data.table(data.crosswalk)
