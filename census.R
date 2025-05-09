@@ -64,7 +64,7 @@ census.crosswalk <- function(crosswalk.file, col.start, col.end, col.weight, dat
   if (!all(unique(data.walk$GEOID) %in% crosswalk.file[, get(col.start)])){
     stop("GEOID does not exist in crosswalk.file, check if crosswalk file is correct")}
   if (!any(unique(data.walk$GEOID) %in% crosswalk.file[, get(col.end)])){
-    cat("Note: GEOID is not in col.end (expected for crosswalks across different levels) \n")}
+    cat("Note: Zero GEOID in col.end (expected for crosswalks across levels) \n")}
   if (!is.null(col.year)){
     years.mod = sort(unique(data.walk[, get(col.year)])) %% 10
     if (!all(sort(years.mod) == years.mod)){cat("Warning: Years not from same decade \n")}
