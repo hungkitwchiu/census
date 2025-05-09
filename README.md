@@ -24,7 +24,7 @@ Load `tidycensus` and `tidyverse` and make sure that you have your census API ke
 
 `function` `get.census.list()` wrapper for `get.census()` get multiple state-county at once
 
--   `state.county.list`: nested list of states and counties in the form of `list(list(state1, list(county1, county2)), list(state2, county1))` and so on
+-   `state.county.list`: nested list of states and counties in the form of `list(list(state1, list(county1, county2)), list(state2, list(county1)))` and so on
 
 `function` `census.crosswalk()` crosswalk data using weights from [NHGIS](https://www.nhgis.org/geographic-crosswalks)
 
