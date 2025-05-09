@@ -28,17 +28,17 @@ Load `tidycensus` and `tidyverse` and make sure that you have your census API ke
 
 `function` `census.crosswalk()` crosswalk data using weights from [NHGIS](https://www.nhgis.org/geographic-crosswalks)
 
--   `data.crosswalk` : data.frame or data.table of the correct crosswalk data from NHGIS
+-   `crosswalk.file` : data.frame or data.table of the correct crosswalk file from NHGIS
 
 -   `col.start` : chr column name of the originating GEOID
 
--   `col.target` : chr column name of the target GEOID
+-   `col.end` : chr column name of the target GEOID
 
 -   `col.weight` : chr column name of the interpolation weight
 
--   `data.var` : data.frame or data.table of the census data
+-   `data.walk` : data.frame or data.table of the census data that needs to be crosswalked
 
--   `col.estimate` : chr column name of the variable to be crosswalked
+-   `cols.walk` : chr column name of the variable to be crosswalked; can be a vector
 
 -   `col.year` = NULL : chr column name of the year column, if any; note that only data from the same decade can be fed into the function
 
