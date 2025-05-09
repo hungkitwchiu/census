@@ -12,7 +12,6 @@ get.census <- function(state.county, geography, years, variables, geometry = FAL
     temp <- future_map_dfr(
       years,
       ~ get_acs(
-        # "tract" or "block group" or "county subdivision", etc.
         geography = geography,
         variables = variables,
         state = state.county[[1]],
@@ -40,6 +39,7 @@ get.census <- function(state.county, geography, years, variables, geometry = FAL
 }
 
 get.census.list <- function(state.county.list, geography, years, variables, geometry){
+  plan(multisession, workers = parallelly::availableCores())
   tic()
   data.list <- lapply(state.county.list, function(x){
     print(x)
