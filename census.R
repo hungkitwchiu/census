@@ -55,35 +55,42 @@ get.census.list <- function(s.c.list, geography, years, variables, geometry = FA
   return(rbindlist(data.list))
 }
 
-# currently supports a single variable data.var
-census.crosswalk <- function(data.crosswalk, col.start, col.target, col.weight, data.var, col.estimate, col.year = NULL){
-  data.crosswalk <- as.data.table(data.crosswalk)
-  data.var <- as.data.table(data.var)
+census.crosswalk <- function(crosswalk.file, col.start, col.end, col.weight, data.walk, cols.walk, col.year = NULL){
+  crosswalk.file <- as.data.table(crosswalk.file)
+  data.walk <- as.data.table(data.walk)
+  cols.walk <- unname(cols.walk) # just in case a named vector is passed
+  
   # check data integrity
-  if (!("GEOID" %in% colnames(data.var))){stop("GEOID not found in data.var")}
-  if (!all(unique(data.var$GEOID) %in% data.crosswalk[, get(col.start)])){
-    stop("GEOID does not exist in data.crosswalk, check if you have the correct crosswalk for your geography")}
-  if (!any(unique(data.var$GEOID) %in% data.crosswalk[, get(col.target)])){
-    cat("Note that none of the GEOID is in col.target (expected for crosswalks between different levels of geography) \n")}
+  if (any(!cols.walk %in% names(data.walk))){stop("Missing crosswalk columns!")}
+  if (!("GEOID" %in% colnames(data.walk))){stop("GEOID not found in data.walk")}
+  if (!all(unique(data.walk$GEOID) %in% crosswalk.file[, get(col.start)])){
+    stop("GEOID does not exist in crosswalk.file, check if crosswalk file is correct")}
+  if (!any(unique(data.walk$GEOID) %in% crosswalk.file[, get(col.end)])){
+    cat("Note: GEOID is not in col.end (expected for crosswalks across different levels) \n")}
   if (!is.null(col.year)){
-    years.mod = sort(unique(data.var[, get(col.year)])) %% 10
-    if (!all(sort(years.mod) == years.mod)){print("Warning: Years are not from the same decade")}
+    years.mod = sort(unique(data.walk[, get(col.year)])) %% 10
+    if (!all(sort(years.mod) == years.mod)){cat("Warning: Years not from same decade \n")}
   }
   
-  cols.group <- c(eval(col.year), eval(col.target))
   
-  temp <- data.crosswalk %>% 
-    filter(!!rlang::sym(col.start) %in% data.var$GEOID) %>%
-    dplyr::select(!!rlang::sym(col.start), !!rlang::sym(col.target), !!rlang::sym(col.weight)) %>%
-    right_join(data.var, by = join_by(!!rlang::sym(col.start) == GEOID), keep = TRUE, relationship = "many-to-many") %>% # look up estimates of corresponding col.start
-    mutate(target.estimate = get(col.estimate) * get(col.weight)) %>%
+  # get desired group_by keys; year could be NULL
+  cols.group <- c(eval(col.year), eval(col.end))
+  
+  temp2 <- crosswalk.file %>% 
+    # filter only relevant GEOID
+    filter(!!rlang::sym(col.start) %in% data.walk$GEOID) %>%
+    # select starting GEOID, ending GEOID, and weight columns
+    dplyr::select(!!rlang::sym(col.start), !!rlang::sym(col.end), !!rlang::sym(col.weight)) %>%
+    # right join data.walk and look up estimates of corresponding col.start
+    right_join(data.walk, by = join_by(!!rlang::sym(col.start) == GEOID), 
+               keep = TRUE, relationship = "many-to-many") %>%
+    # mutate/crosswalked variables; basically calculating a weight average
+    mutate_at(cols.walk, ~.x * get(col.weight)) %>%
+    # aggregate back to a single row per GEOID per year
     group_by(across(any_of(cols.group))) %>%
-    dplyr::summarise(estimate = as.integer(sum(target.estimate))) %>%
-    rename_with(~ "GEOID", !!rlang::sym(col.target))
-  
-  #temp <- data.var %>%
-  #  left_join(data.crosswalk, by = join_by(GEOID == !!rlang::sym(col.start)), keep = TRUE) %>% # look up estimates of corresponding col.start
-  #  mutate(target.estimate = get(col.estimate) * get(col.weight))
+    dplyr::summarise_at(cols.walk, ~as.integer(sum(.x, na.rm = TRUE), na.rm=TRUE)) %>% 
+    # rename GEOID column to "GEOID"
+    rename_with(~ "GEOID", !!rlang::sym(col.end))
   
   return(temp)
 }
