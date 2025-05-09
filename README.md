@@ -2,7 +2,7 @@
 
 Load `tidycensus` and `tidyverse` and make sure that you have your census API key loaded into the environment.
 
-`function` `get.census()` wrapper for `get_acs()` or `get_decennial()`, allowing a list of years at once
+`function` `get.census()` wrapper for `get_acs()` or `get_decennial()` to get multiple years at once
 
 -   `state` : chr such as "CA" or "06" (NOTE: a numeric 6 will not work)
 
@@ -21,6 +21,10 @@ Load `tidycensus` and `tidyverse` and make sure that you have your census API ke
 -   `acs` = TRUE : default call get_acs, if FALSE, call get_decennial
 
 -   `years.id` = "year" : chr column name assigned to year column
+
+`function` `get.census.list()` wrapper for `get.census()` get multiple state-county at once
+
+-   `state.county.list`: nested list of states and counties in the form of list(list(state1, list(county1, county2)), list(state2, county1)) and so on
 
 `function` `census.crosswalk()` crosswalk data using weights from [NHGIS](https://www.nhgis.org/geographic-crosswalks)
 
