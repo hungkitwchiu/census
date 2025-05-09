@@ -8,6 +8,7 @@ library(furrr)
 
 get.census <- function(state.county, geography, years, variables, geometry = FALSE,
                        survey = "acs5", acs = TRUE, years.id = "year"){
+  variables <- unname(variables)
   if (acs){
     temp <- future_map_dfr(
       years,
@@ -39,16 +40,13 @@ get.census <- function(state.county, geography, years, variables, geometry = FAL
 }
 
 get.census.list <- function(s.c.list, geography, years, variables, geometry = FALSE){
+  variables <- unname(variables)
   plan(multisession, workers = parallelly::availableCores())
   tic()
   data.list <- lapply(s.c.list, function(x){
     print(x)
-    temp <- get.census(x, geography, years, variables, geometry = geometry)
-    temp <- temp %>% 
-      select(year, GEOID, variable, estimate)  %>%
-      mutate(variable = str_extract(variable, "[0-9]*$")) %>%
-      mutate(variable = as.numeric(variable)) %>%
-      mutate(variable = variables[variable])
+    temp <- get.census(x, geography, years, variables, geometry = geometry) %>%
+      select(year, GEOID, variable, estimate)
     temp <- dcast(setDT(temp), year+GEOID~variable, value.var = "estimate")
   })
   toc()
