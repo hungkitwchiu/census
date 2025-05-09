@@ -3,7 +3,7 @@
 Some of this code is embeded in another project, see [Census data](https://hungkitwchiu.github.io/doc.Census.html) for a discussion of some of the functions, including a complete, fully worked example of crosswalking 2020s block group variables to 2010s tracts. To call, <br />
 
 ```r
-source("https://raw.githubusercontent.com/hkwilliamchiu/r-data-wrangling/main/functions.R")
+source("https://raw.githubusercontent.com/hungkitwchiu.github.io/r-data-wrangling/main/functions.R")
 ```
 To use the census related functions, make sure you load `tidycensus` and `tidyverse` and make sure that you have your census API key stored the environment otherwise you will be limited to 500 calls per day. API key can be obtained for free from Census.
 
