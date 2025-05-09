@@ -1,3 +1,6 @@
+Some of this code is embeded in another project, see [Census data](https://hkwilliamchiu.github.io/doc.Census.html) for a discussion of some of the functions, including a complete, fully worked example of crosswalking 2020s block group variables to 2010s tracts.
+
+
 **AS OF MAY 8, 2025, `geometry` DATA IS BACK ONLINE**
 
 Load `tidycensus` and `tidyverse` and make sure that you have your census API key loaded into the environment.
