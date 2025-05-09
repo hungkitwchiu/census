@@ -82,7 +82,7 @@ census.crosswalk <- function(crosswalk.file, col.start, col.end, col.weight, dat
     # right join data.walk and look up estimates of corresponding col.start
     right_join(data.walk, by = join_by(!!rlang::sym(col.start) == GEOID), 
                keep = TRUE, relationship = "many-to-many") %>%
-    # mutate/crosswalked variables; basically calculating a weight average
+    # mutate/crosswalked variables; basically calculating a weighted average
     mutate_at(cols.walk, ~.x * get(col.weight)) %>%
     # aggregate back to a single row per GEOID per year
     group_by(across(any_of(cols.group))) %>%
