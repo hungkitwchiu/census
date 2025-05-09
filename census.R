@@ -6,8 +6,8 @@ library(furrr)
 # check that you have your census API key loaded
 # census_api_key("YOUR API KEY GOES HERE")
 
-get.census <- function(state.county, geography, years, variables, geometry = FALSE, survey = "acs5", 
-                       acs = TRUE, years.id = "year"){
+get.census <- function(state.county, geography, years, variables, geometry = FALSE,
+                       survey = "acs5", acs = TRUE, years.id = "year"){
   if (acs){
     temp <- future_map_dfr(
       years,
@@ -21,14 +21,14 @@ get.census <- function(state.county, geography, years, variables, geometry = FAL
         geometry = geometry,
         cache_table = TRUE
       ),
-      .id = eval(years.id)  # when combining results, add id var (name of list item)
+      .id = eval(years.id) # add id var (name of list item) when combining
     ) %>%
       arrange(variable, GEOID) %>% 
       mutate(year = as.numeric(year) + min(years)-1)
-  } else { # 2000, 2010, or 2020 only for decennial
+  } else { # 2000, 2010, or 2020 only
     temp <- get_decennial(
       geography = geography,
-      variables = variables, # P001001 for population
+      variables = variables,
       state = state.county[[1]],
       county = state.county[[2]],
       year = years,
