@@ -38,10 +38,10 @@ get.census <- function(state.county, geography, years, variables, geometry = FAL
   return(temp)
 }
 
-get.census.list <- function(state.county.list, geography, years, variables, geometry){
+get.census.list <- function(s.c.list, geography, years, variables, geometry = FALSE){
   plan(multisession, workers = parallelly::availableCores())
   tic()
-  data.list <- lapply(state.county.list, function(x){
+  data.list <- lapply(s.c.list, function(x){
     print(x)
     temp <- get.census(x, geography, years, variables, geometry = geometry)
     temp <- temp %>% 
