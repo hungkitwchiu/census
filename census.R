@@ -114,7 +114,7 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE
     crs = st_crs(crs) # assuming coords come in WGS84, specifically EPSG:4326
   ) %>%
     st_transform(crs = st_crs(data.shape)) # convert to crs of shape file
-  
+  # generate a temp id col and set up a subset of unique geo here
   if (parallel){
     cl <- makeCluster(detectCores(logical = FALSE)-1, type = "PSOCK")
     clusterExport(cl, varlist = c("data.shape"), envir = environment())
@@ -124,7 +124,7 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE
     stopCluster(cl)
     gc()
   }else{data.interest <- data.interest %>% mutate(block = st_within(Geometry, data.shape))}
-  
+  # left join the matched geos here
   in.none = sum(data.interest$block %>% lengths == 0)
   in.multiple = sum(data.interest$block %>% lengths > 1)
   
