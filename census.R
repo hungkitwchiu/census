@@ -105,36 +105,44 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE
     filter(!abs(!!rlang::sym(coords.name[1])) < 1e-6) %>%
     filter(!abs(!!rlang::sym(coords.name[2])) < 1e-6)
   nrow.d <- nrow(data.interest)
-  
+
   if (nrow.d < nrow.c){cat("Dropped", nrow.c - nrow.d, "rows out of", nrow.c, "with no coordinates \n")}
   
-  data.interest$Geometry <- st_as_sf(
-    as.data.frame(data.interest %>% dplyr::select(all_of(coords.name))),
+  # get unique subset for mapping
+  data.interest <- data.interest %>%
+    mutate(tempID = as.factor(paste(!!rlang::sym(coords.name[1]), !!rlang::sym(coords.name[2]))))
+  unique.coords <- data.interest %>%
+    select(tempID, !!rlang::sym(coords.name[1]), !!rlang::sym(coords.name[2])) %>%
+    unique(by="tempID")
+
+  unique.coords$Geometry <- st_as_sf(
+    as.data.frame(unique.coords %>% dplyr::select(all_of(coords.name))),
     coords = coords.name,
-    crs = st_crs(crs) # assuming coords come in WGS84, specifically EPSG:4326
-  ) %>%
+    crs = st_crs(crs)) %>% # assuming coords come in WGS84, specifically EPSG:4326
     st_transform(crs = st_crs(data.shape)) # convert to crs of shape file
-  # generate a temp id col and set up a subset of unique geo here
+
   if (parallel){
     cl <- makeCluster(detectCores(logical = FALSE)-1, type = "PSOCK")
     clusterExport(cl, varlist = c("data.shape"), envir = environment())
-    # make sure a list is passed in 2nd argument, can be data.interest[, "Geometry"]
-    # but not data.interest[, `Geometry`] or data.interest[, Geometry]
-    data.interest$block <- parLapplyLB(cl, list(data.interest$Geometry), st_within, data.shape)
+    # make sure a list is passed in 2nd argument, can be unique.coords[, "Geometry"]
+    # but not unique.coords[, `Geometry`] or unique.coords[, Geometry]
+    unique.coords$block <- parLapplyLB(cl, list(unique.coords$Geometry), st_within, data.shape)
     stopCluster(cl)
     gc()
-  }else{data.interest <- data.interest %>% mutate(block = st_within(Geometry, data.shape))}
-  # left join the matched geos here
-  in.none = sum(data.interest$block %>% lengths == 0)
-  in.multiple = sum(data.interest$block %>% lengths > 1)
+  }else{unique.coords <- unique.coords %>% mutate(block = st_within(Geometry, data.shape))}
   
+  # do filtering here, before joining
+  in.none = sum(unique.coords$block %>% lengths == 0)
+  in.multiple = sum(unique.coords$block %>% lengths > 1)
+  if (in.none > 0){cat("Removed", in.none, "coordinates with unmatched geometry", "\n")}
+  if (in.multiple > 0){cat("Removed", in.multiple, "coordinates with multiple matched blocks", "\n")}
+
   data.interest <- data.interest %>%
-    filter(block %>% lengths > 0) %>% # get rid of (empty) in Sparse geometry binary predicate (sgbp) list
-    filter(block %>% lengths < 2) %>% # also get rid of points within multiple shapes
-    mutate(GEOID = data.shape$GEOID[as.numeric(unlist(block))]) # make sure GEOID is in data.shape
-  
-  if (in.none > 0){cat("Removed", in.none, "rows with unmatched geometry", "\n")}
-  if (in.multiple > 0){cat("Removed", in.multiple, "rows with multiple matched blocks", "\n")}
+    left_join(unique.coords[, .SD, .SDcols = !c(coords.name)], by = "tempID") %>%
+    filter(block %>% lengths > 0) %>% # remove (empty) in Sparse geometry binary predicate (sgbp) list
+    filter(block %>% lengths < 2) %>% # also remove points within multiple shapes
+    mutate(GEOID = data.shape$GEOID[as.numeric(unlist(block))]) %>%
+    select(-tempID)
   
   return(data.interest)
 }
