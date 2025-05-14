@@ -46,7 +46,7 @@ get.census.list <- function(s.c.list, geography, years, variables, geometry = FA
   data.list <- lapply(s.c.list, function(x){
     print(x)
     temp <- get.census(x, geography, years, variables, geometry = geometry) %>%
-      select(year, GEOID, variable, estimate)
+      dplyr::select(year, GEOID, variable, estimate)
     temp <- dcast(setDT(temp), year+GEOID~variable, value.var = "estimate")
   })
   toc()
@@ -112,7 +112,7 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE
   data.interest <- data.interest %>%
     mutate(tempID = as.factor(paste(!!rlang::sym(coords.name[1]), !!rlang::sym(coords.name[2]))))
   unique.coords <- data.interest %>%
-    select(tempID, !!rlang::sym(coords.name[1]), !!rlang::sym(coords.name[2])) %>%
+    dplyr::select(tempID, !!rlang::sym(coords.name[1]), !!rlang::sym(coords.name[2])) %>%
     unique(by="tempID")
 
   unique.coords$Geometry <- st_as_sf(
