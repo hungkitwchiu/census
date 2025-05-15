@@ -190,6 +190,7 @@ get.geometry <- function(data.interest,
   
   data.interest <- data.interest %>%
     left_join(unique.coords[, .SD, .SDcols = !c(coords.name)], by = "tempID") %>%
+    # call outs are for *unique coordinates*, number of rows removed may be higher
     filter(block %>% lengths > 0) %>% # remove (empty) in Sparse geometry binary predicate (sgbp) list
     filter(block %>% lengths < 2) %>% # also remove points within multiple shapes
     mutate(GEOID = data.shape$GEOID[as.numeric(unlist(block))]) %>%
