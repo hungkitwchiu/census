@@ -193,7 +193,7 @@ get.geometry <- function(data.interest,
     filter(block %>% lengths > 0) %>% # remove (empty) in Sparse geometry binary predicate (sgbp) list
     filter(block %>% lengths < 2) %>% # also remove points within multiple shapes
     mutate(GEOID = data.shape$GEOID[as.numeric(unlist(block))]) %>%
-    select(-tempID)
+    dplyr::select(-tempID)
   
   return(data.interest)
 }
