@@ -117,11 +117,7 @@ census.crosswalk <- function(crosswalk.file,
   return(temp)
 }
 
-get.geometry <- function(data.interest,
-                         coords.name,
-                         data.shape,
-                         parallel = TRUE,
-                         crs = "EPSG:4326") {
+get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE, crs = "EPSG:4326") {
   nrow.c <- nrow(data.interest)
   data.interest <- data.interest %>%
     filter(!(!!rlang::sym(coords.name[1]) %in% c("", "NA"))) %>%
@@ -134,29 +130,18 @@ get.geometry <- function(data.interest,
     filter(!abs(!!rlang::sym(coords.name[2])) < 1e-6)
   nrow.d <- nrow(data.interest)
   
-  if (nrow.d < nrow.c) {
-    cat("Dropped",
-        nrow.c - nrow.d,
-        "rows out of",
-        nrow.c,
-        "with no coordinates \n")
-  }
+  if (nrow.d < nrow.c) {cat("Dropped", nrow.c - nrow.d, "rows out of", nrow.c, "with no coordinates \n")}
   
   # get unique subset for mapping
   data.interest <- data.interest %>%
-    mutate(tempID = as.factor(paste(
-      !!rlang::sym(coords.name[1]), !!rlang::sym(coords.name[2])
-    )))
+    mutate(tempID = as.factor(paste(!!rlang::sym(coords.name[1]), !!rlang::sym(coords.name[2]))))
   unique.coords <- data.interest %>%
-    dplyr::select(tempID,
-                  !!rlang::sym(coords.name[1]),
-                  !!rlang::sym(coords.name[2])) %>%
+    dplyr::select(tempID, !!rlang::sym(coords.name[1]), !!rlang::sym(coords.name[2])) %>%
     unique(by = "tempID")
   
   unique.coords$Geometry <- st_as_sf(
     as.data.frame(unique.coords %>% dplyr::select(all_of(coords.name))),
-    coords = coords.name,
-    crs = st_crs(crs)
+    coords = coords.name, crs = st_crs(crs)
   ) %>% # assuming coords come in WGS84, i.e., EPSG:4326
     st_transform(crs = st_crs(data.shape)) # convert to crs of shape file
   
@@ -168,25 +153,13 @@ get.geometry <- function(data.interest,
     unique.coords$block <- parLapplyLB(cl, list(unique.coords$Geometry), st_within, data.shape)
     stopCluster(cl)
     # gc() # un-comment garbage collection gc() if you are tight on ram
-  } else{
-    unique.coords <- unique.coords %>% mutate(block = st_within(Geometry, data.shape))
-  }
+  } else{ unique.coords <- unique.coords %>% mutate(block = st_within(Geometry, data.shape)) }
   
   # do filtering here, before joining
   in.none = sum(unique.coords$block %>% lengths == 0)
   in.multiple = sum(unique.coords$block %>% lengths > 1)
-  if (in.none > 0) {
-    cat("Removed",
-        in.none,
-        "coordinates with unmatched geometry",
-        "\n")
-  }
-  if (in.multiple > 0) {
-    cat("Removed",
-        in.multiple,
-        "coordinates with multiple matched blocks",
-        "\n")
-  }
+  if (in.none > 0) { cat("Removed", in.none, "coordinates with unmatched geometry", "\n") }
+  if (in.multiple > 0) { cat("Removed", in.multiple, "coordinates with multiple matched blocks", "\n") }
   
   data.interest <- data.interest %>%
     left_join(unique.coords[, .SD, .SDcols = !c(coords.name)], by = "tempID") %>%
