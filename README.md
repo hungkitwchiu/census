@@ -5,7 +5,7 @@ Some of this code is embeded in another project, see [Census data](https://hungk
 ```r
 source("https://raw.githubusercontent.com/hungkitwchiu/census/main/census.R")
 ```
-To use the census related functions, make sure you load `tidycensus` and `tidyverse` and make sure that you have your census API key stored the environment otherwise you will be limited to 500 calls per day. API key can be obtained for free from Census. **THIS IS A JOKE: API keys can also be obtained through a cursory search of "CENSUS_API" on github, there are many that are exposed, some by professionals who should have known better**
+To use the census related functions, make sure you load `tidycensus` and `tidyverse` and make sure that you have your census API key stored the environment otherwise you will be limited to 500 calls per day. API key can be obtained for free from Census. **THIS IS A JOKE: API keys can also be obtained through a cursory search of "CENSUS_API" on github, there are many that are exposed, some by professionals who should have known better**.
 
 # Functions
 
