@@ -121,8 +121,7 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE
   nrow.c <- nrow(data.interest)
   data.interest <- data.interest %>%
     filter(!(!!rlang::sym(coords.name[1]) %in% c("", "NA"))) %>%
-    # don't refactor this using any(), you tried
-    # omit if latitude or longitude is NA
+    # don't refactor this using any(), you tried; omit if latitude or longitude is NA
     filter(!is.na(!!rlang::sym(coords.name[1]))) %>%
     filter(!is.na(!!rlang::sym(coords.name[2]))) %>%
     # omit if latitude or longitude is (floating point) zero
