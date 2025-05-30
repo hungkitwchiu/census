@@ -152,7 +152,7 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE
     unique.coords$block <- parLapplyLB(cl, list(unique.coords$Geometry), st_within, data.shape)
     stopCluster(cl)
     # gc() # un-comment garbage collection gc() if you are tight on ram
-  } else{ unique.coords <- unique.coords %>% mutate(block = st_within(Geometry, data.shape)) }
+  } else { unique.coords <- unique.coords %>% mutate(block = st_within(Geometry, data.shape)) }
   
   # do filtering here, before joining
   in.none = sum(unique.coords$block %>% lengths == 0)
