@@ -57,6 +57,6 @@ To use the census related functions, make sure you load `tidycensus` and `tidyve
 
 -  `coords.name` : character vector of 2 elements, with first one being column name of longitude (X), and second one being column name of latitude (Y)
 
--  `data.shape` : relevant Census data with geography information (TIGER lines)
+-  `data.shape` : relevant spatial data with geography information (e.g., TIGER/Line Shapefiles)
 
 -  `parallel` : if `TRUE`, run code in parallel using multiple cores
