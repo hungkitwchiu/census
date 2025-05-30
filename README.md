@@ -1,6 +1,6 @@
 # census
 
-Some of this code is embeded in another project, see [Census data](https://hungkitwchiu.github.io/doc.Census.html) for a discussion of some of the functions, including a complete, fully worked example of crosswalking 2020s block group variables to 2010s tracts. To call, <br />
+To call, <br />
 
 ```r
 source("https://raw.githubusercontent.com/hungkitwchiu/census/main/census.R")
