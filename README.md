@@ -60,3 +60,5 @@ To use the census related functions, make sure you load `tidycensus` and `tidyve
 -  `data.shape` : relevant spatial data with geography information (e.g., TIGER/Line Shapefiles)
 
 -  `parallel` : if `TRUE`, run code in parallel using multiple cores
+
+-  `crs` : Corodinate reference system of the coordinates in `data.interest` if it is not `WGS84` or `EPSG:4326`
