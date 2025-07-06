@@ -51,7 +51,7 @@ To use the census related functions, make sure you load `tidycensus` and `tidyve
 
 `function` `get.geometry()` function for getting Census geographies for a given data set
 
-*WARNING*: This function treats `(0,0)` coordinates as `NA`
+*WARNING*: This function treats `(0,0)` coordinates (including floating point zeros) as `NA`
 
 -  `data.interest` : data with rows of GPS location that requires mapping to Census geographies, assumed to be `ESPG:4326` (the standard GPS longitude and latitude)
 
