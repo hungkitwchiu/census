@@ -1,7 +1,6 @@
 # census
 
-To call, <br />
-
+To call <br />
 ```r
 source("https://raw.githubusercontent.com/hungkitwchiu/census/main/census.R")
 ```
