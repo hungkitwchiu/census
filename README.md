@@ -4,7 +4,7 @@ To call, <br />
 ```r
 source("https://raw.githubusercontent.com/hungkitwchiu/census/main/census.R")
 ```
-To use the census related functions, make sure you load `tidycensus`, `tidyverse` or other necessary packages, and make sure that you have your census API key stored the environment otherwise you will be limited to 500 calls per day. API key can be obtained for free from Census.
+To use the census related functions, make sure you load `tidycensus`, `tidyverse` or other necessary packages, and make sure that you have your census API key stored the environment otherwise you will be limited to 500 calls per day. API key can be obtained from Census.
 
 ## Functions
 
