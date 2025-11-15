@@ -157,8 +157,8 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE
   # do filtering here, before joining
   in.none = sum(unique.coords$block %>% lengths == 0)
   in.multiple = sum(unique.coords$block %>% lengths > 1)
-  if (in.none > 0) { cat("Removed", in.none, "coordinates with unmatched geometry", "\n") }
-  if (in.multiple > 0) { cat("Removed", in.multiple, "coordinates with multiple matched blocks", "\n") }
+  if (in.none > 0) { cat("Dropped", in.none, "coordinates with unmatched geometry", "\n") }
+  if (in.multiple > 0) { cat("Dropped", in.multiple, "coordinates with multiple matched blocks", "\n") }
   
   data.interest <- data.interest %>%
     left_join(unique.coords[, .SD, .SDcols = !c(coords.name)], by = "tempID") %>%
@@ -170,3 +170,4 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE
   
   return(data.interest)
 }
+
