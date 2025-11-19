@@ -6,14 +6,8 @@ library(furrr)
 # check that you have your census API key loaded
 # census_api_key("YOUR API KEY GOES HERE")
 
-get.census <- function(state.county,
-                       geography,
-                       years,
-                       variables,
-                       geometry = FALSE,
-                       survey = "acs5",
-                       acs = TRUE,
-                       years.id = "year") {
+get.census <- function(state.county, geography, years, variables, geometry = FALSE,
+                       survey = "acs5", acs = TRUE, years.id = "year") {
   variables <- unname(variables)
   if (acs) {
     temp <- future_map_dfr(
@@ -46,10 +40,7 @@ get.census <- function(state.county,
   return(temp)
 }
 
-get.census.list <- function(s.c.list,
-                            geography,
-                            years,
-                            variables,
+get.census.list <- function(s.c.list, geography, years, variables,
                             geometry = FALSE) {
   variables <- unname(variables)
   plan(multisession, workers = parallelly::availableCores())
@@ -64,13 +55,8 @@ get.census.list <- function(s.c.list,
   return(rbindlist(data.list))
 }
 
-census.crosswalk <- function(crosswalk.file,
-                             col.start,
-                             col.end,
-                             col.weight,
-                             data.walk,
-                             cols.walk,
-                             col.year = NULL) {
+census.crosswalk <- function(crosswalk.file, col.start, col.end, col.weight, data.walk,
+                             cols.walk, col.year = NULL) {
   crosswalk.file <- as.data.table(crosswalk.file)
   data.walk <- as.data.table(data.walk)
   cols.walk <- unname(cols.walk) # just in case a named vector is passed
@@ -170,4 +156,5 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE
   
   return(data.interest)
 }
+
 
