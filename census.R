@@ -103,6 +103,8 @@ census.crosswalk <- function(crosswalk.file, col.start, col.end, col.weight, dat
   return(temp)
 }
 
+
+# coords.name: names of the numeric columns holding coordinates, e.g., c("x", "y") or c("LON", "LAT")
 get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE, crs = "EPSG:4326") {
   nrow.c <- nrow(data.interest)
   data.interest <- data.interest %>%
@@ -156,5 +158,6 @@ get.geometry <- function(data.interest, coords.name, data.shape, parallel = TRUE
   
   return(data.interest)
 }
+
 
 
